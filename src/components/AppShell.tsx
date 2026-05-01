@@ -30,7 +30,7 @@ export function AppShell({
   children: React.ReactNode;
 }) {
   return (
-    <main className="mx-auto grid max-w-7xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[280px_1fr] lg:px-8">
+    <main className="mx-auto grid max-w-9xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[280px_1fr] lg:px-8">
       <aside className="h-fit rounded-[36px] border border-muted-dark bg-ink p-4 text-[#FFFDF3] shadow-[0_24px_80px_rgba(17,16,11,0.18)] lg:sticky lg:top-28">
         <div className="dark-grid rounded-[28px] border border-muted-dark bg-charcoal p-4">
           <div className="flex items-center gap-3">
