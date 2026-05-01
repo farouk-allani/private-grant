@@ -13,7 +13,9 @@ import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { privateGrantVaultAbi } from "@/lib/abis";
+import { appChain } from "@/lib/chains";
 import { env } from "@/lib/env";
+import { formatContractError } from "@/lib/errors";
 import { campaignSchema, type CampaignFormValues } from "@/lib/validation";
 
 export function CreateCampaignForm() {
@@ -45,6 +47,7 @@ export function CreateCampaignForm() {
       address: vaultAddress,
       abi: privateGrantVaultAbi,
       functionName: "createCampaign",
+      chainId: appChain.id,
       args: [
         values.name,
         values.description,
@@ -148,7 +151,7 @@ export function CreateCampaignForm() {
             </a>
           ) : null}
           {receipt.isSuccess ? <p className="text-sm font-bold text-primary-deep">Campaign confirmed on-chain.</p> : null}
-          {error ? <p className="text-sm text-danger">{error.message}</p> : null}
+          {error ? <p className="text-sm text-danger">{formatContractError(error)}</p> : null}
         </form>
       </CardContent>
       </Card>

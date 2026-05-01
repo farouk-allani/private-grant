@@ -20,7 +20,9 @@ import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { erc7984Abi, privateGrantVaultAbi } from "@/lib/abis";
+import { appChain } from "@/lib/chains";
 import { env } from "@/lib/env";
+import { formatContractError } from "@/lib/errors";
 import type { Campaign } from "@/lib/types";
 import { payoutSchema, type PayoutFormValues } from "@/lib/validation";
 
@@ -51,6 +53,7 @@ export function ConfidentialPayoutForm({ campaign }: { campaign: Campaign }) {
     abi: erc7984Abi,
     functionName: "isOperator",
     args: address && vaultAddress ? [address, vaultAddress] : undefined,
+    chainId: appChain.id,
     query: { enabled: Boolean(address && vaultAddress && campaign.confidentialToken) }
   });
 
@@ -60,6 +63,7 @@ export function ConfidentialPayoutForm({ campaign }: { campaign: Campaign }) {
       address: campaign.confidentialToken,
       abi: erc7984Abi,
       functionName: "setOperator",
+      chainId: appChain.id,
       args: [vaultAddress, Number(operatorUntil)]
     });
     await isOperator.refetch();
@@ -80,6 +84,7 @@ export function ConfidentialPayoutForm({ campaign }: { campaign: Campaign }) {
         address: vaultAddress,
         abi: privateGrantVaultAbi,
         functionName: "sendConfidentialPayout",
+        chainId: appChain.id,
         args: [campaign.id, values.recipient as Address, handle as Hex, handleProof as Hex, values.memo || ""]
       });
     } catch (error) {
@@ -178,8 +183,8 @@ export function ConfidentialPayoutForm({ campaign }: { campaign: Campaign }) {
           ]}
         />
         {encryptionError ? <p className="text-sm text-danger">{encryptionError}</p> : null}
-        {operator.error ? <p className="text-sm text-danger">{operator.error.message}</p> : null}
-        {payout.error ? <p className="text-sm text-danger">{payout.error.message}</p> : null}
+        {operator.error ? <p className="text-sm text-danger">{formatContractError(operator.error)}</p> : null}
+        {payout.error ? <p className="text-sm text-danger">{formatContractError(payout.error)}</p> : null}
       </CardContent>
     </Card>
   );

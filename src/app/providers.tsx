@@ -5,23 +5,26 @@ import { RainbowKitProvider, darkTheme, getDefaultConfig } from "@rainbow-me/rai
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import { createConfig, http, WagmiProvider } from "wagmi";
-import { arbitrumSepolia } from "wagmi/chains";
 import { injected } from "wagmi/connectors";
+import { appChain } from "@/lib/chains";
 import { env } from "@/lib/env";
+
+const transports = {
+  [appChain.id]: http(env.arbitrumSepoliaRpcUrl)
+};
 
 const config = env.walletConnectProjectId
   ? getDefaultConfig({
       appName: "PrivateGrant Vault",
       projectId: env.walletConnectProjectId,
-      chains: [arbitrumSepolia],
+      chains: [appChain],
+      transports,
       ssr: true
     })
   : createConfig({
-      chains: [arbitrumSepolia],
+      chains: [appChain],
       connectors: [injected({ shimDisconnect: true })],
-      transports: {
-        [arbitrumSepolia.id]: http()
-      },
+      transports,
       ssr: true
     });
 

@@ -53,10 +53,15 @@ NEXT_PUBLIC_PRIVATE_GRANT_VAULT_ADDRESS=
 NEXT_PUBLIC_DEFAULT_ERC20_ADDRESS=
 NEXT_PUBLIC_DEFAULT_CONFIDENTIAL_TOKEN_ADDRESS=
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=
+NEXT_PUBLIC_RPC_URL_ARBITRUM_SEPOLIA=https://sepolia-rollup.arbitrum.io/rpc
 CHAINGPT_API_KEY=
 RPC_URL_ARBITRUM_SEPOLIA=
 PRIVATE_KEY=
 ```
+
+`NEXT_PUBLIC_RPC_URL_ARBITRUM_SEPOLIA` is the browser-facing RPC used by wagmi and RainbowKit.
+If your wallet reports `RPC endpoint not found or unavailable`, set this to a working Arbitrum
+Sepolia RPC and update the wallet's Arbitrum Sepolia network RPC URL to the same endpoint.
 
 `PRIVATE_KEY` must be a funded Arbitrum Sepolia deployer key. Do not commit it.
 

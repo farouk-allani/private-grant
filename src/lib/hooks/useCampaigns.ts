@@ -2,9 +2,9 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { usePublicClient } from "wagmi";
-import { arbitrumSepolia } from "wagmi/chains";
 import { decodeEventLog, type Address } from "viem";
 import { privateGrantVaultAbi } from "@/lib/abis";
+import { appChain } from "@/lib/chains";
 import { env } from "@/lib/env";
 import type { Campaign, PayoutMetadata } from "@/lib/types";
 
@@ -13,7 +13,7 @@ type CampaignCreatedLogArgs = {
 };
 
 export function useCampaigns() {
-  const publicClient = usePublicClient({ chainId: arbitrumSepolia.id });
+  const publicClient = usePublicClient({ chainId: appChain.id });
   const vaultAddress = env.vaultAddress;
 
   return useQuery({
@@ -62,7 +62,7 @@ export function useCampaigns() {
 }
 
 export function useCampaign(id?: bigint) {
-  const publicClient = usePublicClient({ chainId: arbitrumSepolia.id });
+  const publicClient = usePublicClient({ chainId: appChain.id });
   const vaultAddress = env.vaultAddress;
 
   return useQuery({
@@ -82,7 +82,7 @@ export function useCampaign(id?: bigint) {
 }
 
 export function usePayouts(id?: bigint) {
-  const publicClient = usePublicClient({ chainId: arbitrumSepolia.id });
+  const publicClient = usePublicClient({ chainId: appChain.id });
   const vaultAddress = env.vaultAddress;
 
   return useQuery({
@@ -113,7 +113,7 @@ export function usePayouts(id?: bigint) {
 
 export function useRecipientPayouts(recipient?: Address) {
   const campaigns = useCampaigns();
-  const publicClient = usePublicClient({ chainId: arbitrumSepolia.id });
+  const publicClient = usePublicClient({ chainId: appChain.id });
   const vaultAddress = env.vaultAddress;
 
   return useQuery({

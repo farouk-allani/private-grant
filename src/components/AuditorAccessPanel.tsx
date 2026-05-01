@@ -12,7 +12,9 @@ import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { privateGrantVaultAbi } from "@/lib/abis";
+import { appChain } from "@/lib/chains";
 import { env } from "@/lib/env";
+import { formatContractError } from "@/lib/errors";
 import { shortenAddress } from "@/lib/format";
 import type { Campaign } from "@/lib/types";
 
@@ -43,6 +45,7 @@ export function AuditorAccessPanel({ campaign }: { campaign: Campaign }) {
       address: vaultAddress,
       abi: privateGrantVaultAbi,
       functionName: "grantAuditorForPayout",
+      chainId: appChain.id,
       args: [campaign.id, BigInt(values.payoutIndex), values.auditor as Address]
     });
   }
@@ -53,6 +56,7 @@ export function AuditorAccessPanel({ campaign }: { campaign: Campaign }) {
       address: vaultAddress,
       abi: privateGrantVaultAbi,
       functionName: "revokeCampaignAuditor",
+      chainId: appChain.id,
       args: [campaign.id]
     });
   }
@@ -102,8 +106,8 @@ export function AuditorAccessPanel({ campaign }: { campaign: Campaign }) {
         </Button>
         {grantReceipt.isSuccess ? <p className="text-sm font-bold text-primary-deep">Auditor grant confirmed.</p> : null}
         {revokeReceipt.isSuccess ? <p className="text-sm font-bold text-primary-deep">Auditor status updated.</p> : null}
-        {grant.error ? <p className="text-sm text-danger">{grant.error.message}</p> : null}
-        {revoke.error ? <p className="text-sm text-danger">{revoke.error.message}</p> : null}
+        {grant.error ? <p className="text-sm text-danger">{formatContractError(grant.error)}</p> : null}
+        {revoke.error ? <p className="text-sm text-danger">{formatContractError(revoke.error)}</p> : null}
       </CardContent>
     </Card>
   );

@@ -15,7 +15,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { privateGrantVaultAbi } from "@/lib/abis";
+import { appChain } from "@/lib/chains";
 import { env } from "@/lib/env";
+import { formatContractError } from "@/lib/errors";
 import { formatDate, formatTokenAmount, shortenAddress } from "@/lib/format";
 import { useCampaign, usePayouts } from "@/lib/hooks/useCampaigns";
 
@@ -34,6 +36,7 @@ export default function CampaignDetailPage() {
       address: env.vaultAddress,
       abi: privateGrantVaultAbi,
       functionName: "closeCampaign",
+      chainId: appChain.id,
       args: [id]
     });
   }
@@ -100,15 +103,18 @@ export default function CampaignDetailPage() {
                   </a>
                 ) : null}
                 {address?.toLowerCase() === campaign.data.sponsor.toLowerCase() ? (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    onClick={closeCampaign}
-                    disabled={!campaign.data.isActive || close.isPending || closeReceipt.isLoading}
-                  >
-                    <Archive className="h-4 w-4" />
-                    Close campaign
-                  </Button>
+                  <div className="grid gap-2">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={closeCampaign}
+                      disabled={!campaign.data.isActive || close.isPending || closeReceipt.isLoading}
+                    >
+                      <Archive className="h-4 w-4" />
+                      Close campaign
+                    </Button>
+                    {close.error ? <p className="text-sm text-danger">{formatContractError(close.error)}</p> : null}
+                  </div>
                 ) : null}
               </div>
             </CardContent>

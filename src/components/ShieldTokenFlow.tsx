@@ -12,7 +12,9 @@ import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { erc20Abi, privateGrantVaultAbi } from "@/lib/abis";
+import { appChain } from "@/lib/chains";
 import { env } from "@/lib/env";
+import { formatContractError } from "@/lib/errors";
 import type { Campaign } from "@/lib/types";
 import { shieldSchema, type ShieldFormValues } from "@/lib/validation";
 
@@ -36,6 +38,7 @@ export function ShieldTokenFlow({ campaign }: { campaign: Campaign }) {
       address: campaign.token,
       abi: erc20Abi,
       functionName: "approve",
+      chainId: appChain.id,
       args: [vaultAddress, parsedAmount]
     });
   }
@@ -46,6 +49,7 @@ export function ShieldTokenFlow({ campaign }: { campaign: Campaign }) {
       address: vaultAddress,
       abi: privateGrantVaultAbi,
       functionName: "shieldCampaignFunds",
+      chainId: appChain.id,
       args: [campaign.id, parsedAmount]
     });
   }
@@ -114,8 +118,8 @@ export function ShieldTokenFlow({ campaign }: { campaign: Campaign }) {
             }
           ]}
         />
-        {approve.error ? <p className="text-sm text-danger">{approve.error.message}</p> : null}
-        {shield.error ? <p className="text-sm text-danger">{shield.error.message}</p> : null}
+        {approve.error ? <p className="text-sm text-danger">{formatContractError(approve.error)}</p> : null}
+        {shield.error ? <p className="text-sm text-danger">{formatContractError(shield.error)}</p> : null}
       </CardContent>
     </Card>
   );
