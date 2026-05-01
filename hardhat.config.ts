@@ -2,7 +2,11 @@ import "dotenv/config";
 import "@nomicfoundation/hardhat-toolbox";
 import { HardhatUserConfig } from "hardhat/config";
 
-const privateKey = process.env.PRIVATE_KEY;
+const privateKey = process.env.PRIVATE_KEY
+  ? process.env.PRIVATE_KEY.startsWith("0x")
+    ? process.env.PRIVATE_KEY
+    : `0x${process.env.PRIVATE_KEY}`
+  : undefined;
 const arbitrumSepoliaRpc = process.env.RPC_URL_ARBITRUM_SEPOLIA;
 
 const config: HardhatUserConfig = {
