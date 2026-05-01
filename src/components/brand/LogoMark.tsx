@@ -11,24 +11,30 @@ export function LogoMark({ className }: { className?: string }) {
       xmlns="http://www.w3.org/2000/svg"
     >
       <rect width="64" height="64" rx="18" fill="#11100B" />
-      <rect x="1.5" y="1.5" width="61" height="61" rx="16.5" stroke="#FFD800" strokeOpacity="0.22" strokeWidth="3" />
-      <path
-        d="M20 32C20 25.373 25.373 20 32 20C38.627 20 44 25.373 44 32C44 38.627 38.627 44 32 44C25.373 44 20 38.627 20 32Z"
+      <rect
+        x="2"
+        y="2"
+        width="60"
+        height="60"
+        rx="16"
         stroke="#FFD800"
-        strokeWidth="6"
+        strokeOpacity="0.24"
+        strokeWidth="3"
       />
+      <path d="M10 32H16" stroke="#FFD800" strokeWidth="4" strokeLinecap="round" />
+      <circle cx="10" cy="32" r="3.5" fill="#FFD800" />
+      <path d="M48 32H54" stroke="#FFD800" strokeWidth="4" strokeLinecap="round" />
+      <circle cx="54" cy="32" r="3.5" fill="#FFD800" />
+      <path d="M32 10L49 17V30.5C49 41.25 41.95 49.3 32 53.5C22.05 49.3 15 41.25 15 30.5V17L32 10Z" fill="#FFD800" />
       <path
-        d="M12 30H21.5C25 30 27.25 34 31.25 34H42.5C47 34 49.25 38 52 41"
-        stroke="#FFD800"
+        d="M24 30V26.5C24 22.08 27.58 18.5 32 18.5C36.42 18.5 40 22.08 40 26.5V30"
+        stroke="#11100B"
         strokeWidth="4"
         strokeLinecap="round"
-        strokeLinejoin="round"
       />
-      <circle cx="47.5" cy="37" r="4.5" fill="#FFD800" />
-      <path d="M25 26L32 42L39 26H34.75L32 33.5L29.25 26H25Z" fill="#11100B" />
-      <path d="M31.5 15H32.5" stroke="#FFD800" strokeWidth="4" strokeLinecap="round" />
-      <path d="M31.5 49H32.5" stroke="#FFD800" strokeWidth="4" strokeLinecap="round" />
-      <path d="M49 31.5V32.5" stroke="#FFD800" strokeWidth="4" strokeLinecap="round" />
+      <rect x="22" y="29" width="20" height="17" rx="5" fill="#11100B" />
+      <circle cx="32" cy="36" r="3" fill="#FFD800" />
+      <path d="M32 38.5V42" stroke="#FFD800" strokeWidth="3" strokeLinecap="round" />
     </svg>
   );
 }

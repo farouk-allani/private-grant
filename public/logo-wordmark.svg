@@ -1,10 +1,15 @@
 <svg width="284" height="64" viewBox="0 0 284 64" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect width="64" height="64" rx="18" fill="#11100B"/>
-  <rect x="1.5" y="1.5" width="61" height="61" rx="16.5" stroke="#FFD800" stroke-opacity=".22" stroke-width="3"/>
-  <path d="M20 32C20 25.373 25.373 20 32 20C38.627 20 44 25.373 44 32C44 38.627 38.627 44 32 44C25.373 44 20 38.627 20 32Z" stroke="#FFD800" stroke-width="6"/>
-  <path d="M12 30H21.5C25 30 27.25 34 31.25 34H42.5C47 34 49.25 38 52 41" stroke="#FFD800" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="47.5" cy="37" r="4.5" fill="#FFD800"/>
-  <path d="M25 26L32 42L39 26H34.75L32 33.5L29.25 26H25Z" fill="#11100B"/>
+  <rect x="2" y="2" width="60" height="60" rx="16" stroke="#FFD800" stroke-opacity=".24" stroke-width="3"/>
+  <path d="M10 32H16" stroke="#FFD800" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="10" cy="32" r="3.5" fill="#FFD800"/>
+  <path d="M48 32H54" stroke="#FFD800" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="54" cy="32" r="3.5" fill="#FFD800"/>
+  <path d="M32 10L49 17V30.5C49 41.25 41.95 49.3 32 53.5C22.05 49.3 15 41.25 15 30.5V17L32 10Z" fill="#FFD800"/>
+  <path d="M24 30V26.5C24 22.08 27.58 18.5 32 18.5C36.42 18.5 40 22.08 40 26.5V30" stroke="#11100B" stroke-width="4" stroke-linecap="round"/>
+  <rect x="22" y="29" width="20" height="17" rx="5" fill="#11100B"/>
+  <circle cx="32" cy="36" r="3" fill="#FFD800"/>
+  <path d="M32 38.5V42" stroke="#FFD800" stroke-width="3" stroke-linecap="round"/>
   <text x="80" y="39" fill="#11100B" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="900" letter-spacing="1">PRIVATEGRANT</text>
   <rect x="228" y="18" width="52" height="29" rx="14.5" fill="#11100B"/>
   <text x="239" y="38" fill="#FFD800" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="900" letter-spacing="1">VAULT</text>

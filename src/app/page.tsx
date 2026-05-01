@@ -121,17 +121,22 @@ export default function Home() {
       <section className="relative border-b border-border">
         <div className="absolute inset-0 bg-vault-grid opacity-60" />
         <div className="noise-field absolute inset-0" />
-        <div className="relative mx-auto grid min-h-[calc(100vh-5rem)] max-w-7xl items-center gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8">
-          <div>
-            <Badge variant="secondary">Nox Confidential Token dApp</Badge>
-            <h1 className="mt-7 max-w-4xl text-[2.75rem] font-black uppercase leading-[0.92] text-ink sm:text-6xl lg:text-7xl xl:text-[5.2rem]">
-              Private payouts for serious Web3 teams
+        <div className="relative mx-auto grid min-w-0 max-w-7xl items-center gap-8 px-4 py-9 sm:px-6 sm:py-10 lg:min-h-[calc(100svh-5rem)] lg:grid-cols-[0.84fr_1.16fr] lg:px-8 lg:py-8">
+          <div className="min-w-0 max-w-[min(calc(100vw-2rem),22rem)] sm:max-w-[650px]">
+            {/* <Badge variant="secondary">Nox Confidential Token dApp</Badge> */}
+            <h1 className="mt-6 max-w-full text-[2.65rem] font-black uppercase leading-[0.88] text-ink sm:text-6xl lg:text-[3.75rem] xl:text-[4rem]">
+              <span className="block">Private</span>
+              <span className="block">Payouts</span>
+              <span className="block">for</span>
+              <span className="mt-2 inline-block rounded-[0.28em] bg-primary px-[0.16em] pb-[0.06em] pt-[0.02em] text-ink shadow-[0_16px_38px_rgba(255,216,0,0.22)]">
+                Web3 teams
+              </span>
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-muted">
+            <p className="mt-5 max-w-full text-base leading-7 text-muted sm:max-w-xl sm:text-lg sm:leading-8">
               Create grant, bounty, and payroll campaigns where payout amounts and balances stay
               confidential while settlement remains auditable on Arbitrum Sepolia.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/app"
                 className="inline-flex h-[52px] items-center justify-center gap-2 rounded-[28px] border-b-4 border-primary-deep bg-primary px-7 text-xs font-black uppercase tracking-[0.08em] text-ink shadow-glow transition-all hover:bg-primary-hover active:translate-y-[2px] active:border-b-2"
@@ -146,7 +151,7 @@ export default function Home() {
                 View Demo Flow
               </a>
             </div>
-            <div className="mt-8 flex flex-wrap gap-2">
+            <div className="mt-7 flex flex-wrap gap-2">
               {["Nox TEE-backed", "ERC-7984 compatible", "Arbitrum Sepolia", "No mock data"].map(
                 (item) => (
                   <Badge key={item}>{item}</Badge>
@@ -247,7 +252,7 @@ export default function Home() {
               Private rewards for public ecosystems
             </h2>
           </div>
-          <Badge variant="primary">Builder-focused</Badge>
+          
         </div>
         <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {useCases.map(({ icon: Icon, title, text }) => (

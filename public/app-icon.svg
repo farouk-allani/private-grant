@@ -1,8 +1,13 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect width="512" height="512" rx="128" fill="#11100B"/>
   <rect x="18" y="18" width="476" height="476" rx="110" stroke="#FFD800" stroke-opacity=".24" stroke-width="36"/>
-  <path d="M160 256C160 202.981 202.981 160 256 160C309.019 160 352 202.981 352 256C352 309.019 309.019 352 256 352C202.981 352 160 309.019 160 256Z" stroke="#FFD800" stroke-width="50"/>
-  <path d="M90 240H172C200 240 218 272 250 272H340C376 272 394 304 416 328" stroke="#FFD800" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="380" cy="296" r="34" fill="#FFD800"/>
-  <path d="M200 208L256 336L312 208H278L256 268L234 208H200Z" fill="#11100B"/>
+  <path d="M80 256H128" stroke="#FFD800" stroke-width="34" stroke-linecap="round"/>
+  <circle cx="80" cy="256" r="28" fill="#FFD800"/>
+  <path d="M384 256H432" stroke="#FFD800" stroke-width="34" stroke-linecap="round"/>
+  <circle cx="432" cy="256" r="28" fill="#FFD800"/>
+  <path d="M256 80L392 136V244C392 330 335.6 394.4 256 428C176.4 394.4 120 330 120 244V136L256 80Z" fill="#FFD800"/>
+  <path d="M192 240V212C192 176.64 220.64 148 256 148C291.36 148 320 176.64 320 212V240" stroke="#11100B" stroke-width="32" stroke-linecap="round"/>
+  <rect x="176" y="232" width="160" height="136" rx="40" fill="#11100B"/>
+  <circle cx="256" cy="288" r="24" fill="#FFD800"/>
+  <path d="M256 308V336" stroke="#FFD800" stroke-width="24" stroke-linecap="round"/>
 </svg>
