@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  background: #070a12;
+}
+
+body {
+  margin: 0;
+  color: #f8fafc;
+}
+
+::selection {
+  background: rgba(124, 255, 178, 0.28);
+}
+
+.vault-shell {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(124, 255, 178, 0.12), transparent 28rem),
+    radial-gradient(circle at 75% 12%, rgba(139, 92, 246, 0.16), transparent 26rem),
+    #070a12;
+}
+
+.grid-field {
+  background-size: 48px 48px;
+}

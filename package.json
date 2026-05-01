@@ -1,0 +1,64 @@
+{
+  "name": "privategrant-vault",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Confidential grant, bounty, and payroll payout dApp using iExec Nox Confidential Tokens.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "compile": "hardhat compile",
+    "test": "hardhat test && vitest run",
+    "test:contracts": "hardhat test",
+    "test:frontend": "vitest run",
+    "deploy:arbitrum-sepolia": "hardhat run scripts/deploy.ts --network arbitrumSepolia",
+    "seed:arbitrum-sepolia": "hardhat run scripts/seed-demo.ts --network arbitrumSepolia",
+    "export:abi": "hardhat run scripts/export-abi.ts"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@iexec-nox/handle": "0.1.0-beta.10",
+    "@iexec-nox/nox-confidential-contracts": "0.1.0",
+    "@iexec-nox/nox-protocol-contracts": "0.2.2",
+    "@openzeppelin/contracts": "5.6.1",
+    "@rainbow-me/rainbowkit": "^2.2.9",
+    "@tanstack/react-query": "^5.90.12",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.26",
+    "lucide-react": "^0.562.0",
+    "next": "15.5.15",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-hook-form": "^7.68.0",
+    "tailwind-merge": "^3.4.0",
+    "viem": "^2.43.0",
+    "wagmi": "^2.19.5",
+    "zod": "^4.2.1"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "5.0.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "^22.19.0",
+    "@types/react": "^18.3.27",
+    "@types/react-dom": "^18.3.7",
+    "autoprefixer": "^10.4.23",
+    "dotenv": "^17.2.3",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "15.5.15",
+    "hardhat": "2.28.6",
+    "jsdom": "^27.3.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.19",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15"
+  },
+  "overrides": {
+    "@iexec-nox/nox-confidential-contracts": {
+      "@iexec-nox/nox-protocol-contracts": "0.2.2"
+    }
+  }
+}

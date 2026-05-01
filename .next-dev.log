@@ -1,0 +1,19 @@
+
+> privategrant-vault@0.1.0 dev
+> next dev --hostname 127.0.0.1 --port 3000
+
+   ▲ Next.js 15.5.15
+   - Local:        http://127.0.0.1:3000
+   - Network:      http://127.0.0.1:3000
+
+ ✓ Starting...
+ ✓ Ready in 3s
+ ○ Compiling / ...
+ ✓ Compiled / in 33.9s (10812 modules)
+ GET / 200 in 13796ms
+   Reload env: .env
+ ✓ Compiled in 1235ms (5079 modules)
+   Reload env: .env
+ ✓ Compiled in 8.1s (5092 modules)
+   Reload env: .env
+ ✓ Compiled in 1129ms (5065 modules)
