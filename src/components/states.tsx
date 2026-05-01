@@ -5,8 +5,8 @@ export function LoadingState({ label = "Loading on-chain data" }: { label?: stri
   return (
     <Card>
       <CardContent className="flex items-center gap-3 py-8 text-muted">
-        <Loader2 className="h-5 w-5 animate-spin text-primary" />
-        <span>{label}</span>
+        <Loader2 className="h-5 w-5 animate-spin text-primary-deep" />
+        <span className="font-semibold">{label}</span>
       </CardContent>
     </Card>
   );
@@ -22,9 +22,9 @@ export function EmptyState({
   return (
     <Card>
       <CardContent className="flex gap-4 py-8">
-        <Search className="mt-1 h-5 w-5 text-primary" />
+        <Search className="mt-1 h-5 w-5 text-primary-deep" />
         <div>
-          <p className="font-semibold text-white">{title}</p>
+          <p className="font-black text-ink">{title}</p>
           <p className="mt-1 text-sm leading-6 text-muted">{description}</p>
         </div>
       </CardContent>
@@ -44,7 +44,7 @@ export function ErrorState({
       <CardContent className="flex gap-4 py-8">
         <AlertTriangle className="mt-1 h-5 w-5 text-danger" />
         <div>
-          <p className="font-semibold text-white">{title}</p>
+          <p className="font-black text-ink">{title}</p>
           <p className="mt-1 text-sm leading-6 text-muted">{description}</p>
         </div>
       </CardContent>

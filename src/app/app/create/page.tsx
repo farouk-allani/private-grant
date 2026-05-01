@@ -5,7 +5,7 @@ export default function CreatePage() {
   return (
     <AppShell
       title="Create campaign"
-      description="Publish campaign metadata and connect it to an ERC-20 plus a Nox confidential ERC-7984 wrapper."
+      description="Publish public campaign metadata, connect an ERC-20 funding token, and route later payouts through a Nox confidential ERC-7984 wrapper."
     >
       <CreateCampaignForm />
     </AppShell>

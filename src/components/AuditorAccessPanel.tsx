@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ShieldCheck, UserMinus } from "lucide-react";
+import { FileSearch, ShieldCheck, UserMinus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { isAddress, zeroAddress, type Address } from "viem";
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { privateGrantVaultAbi } from "@/lib/abis";
 import { env } from "@/lib/env";
 import { shortenAddress } from "@/lib/format";
@@ -59,6 +60,10 @@ export function AuditorAccessPanel({ campaign }: { campaign: Campaign }) {
   return (
     <Card>
       <CardHeader>
+        <div className="flex items-center justify-between gap-3">
+          <Badge variant="secondary">Auditor</Badge>
+          <FileSearch className="h-6 w-6 text-primary-deep" />
+        </div>
         <CardTitle>Auditor access</CardTitle>
         <CardDescription>
           Current Nox SDK exposes addViewer/viewACL. This app records revocation on the vault, while
@@ -66,15 +71,18 @@ export function AuditorAccessPanel({ campaign }: { campaign: Campaign }) {
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
-        <div className="rounded-md border border-white/10 bg-white/[0.03] p-3 text-sm text-muted">
-          Campaign auditor: {campaign.auditor === zeroAddress ? "None" : shortenAddress(campaign.auditor)}
+        <div className="rounded-2xl border border-muted-dark bg-ink p-4 text-sm text-dark-muted">
+          <p className="technical-label text-primary">Campaign auditor</p>
+          <p className="mt-2 font-mono text-[#FFFDF3]">
+            {campaign.auditor === zeroAddress ? "None" : shortenAddress(campaign.auditor)}
+          </p>
         </div>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
           <div className="grid gap-4 md:grid-cols-2">
-            <Field label="Auditor wallet" error={form.formState.errors.auditor?.message}>
+            <Field label="Auditor wallet" description="Wallet that can receive supported Nox viewer access." error={form.formState.errors.auditor?.message}>
               <Input placeholder="0x..." {...form.register("auditor")} />
             </Field>
-            <Field label="Payout index" error={form.formState.errors.payoutIndex?.message}>
+            <Field label="Payout index" description="Select the payout record to grant for review." error={form.formState.errors.payoutIndex?.message}>
               <Input inputMode="numeric" {...form.register("payoutIndex")} />
             </Field>
           </div>
@@ -92,8 +100,8 @@ export function AuditorAccessPanel({ campaign }: { campaign: Campaign }) {
           <UserMinus className="h-4 w-4" />
           Revoke app-level auditor
         </Button>
-        {grantReceipt.isSuccess ? <p className="text-sm text-primary">Auditor grant confirmed.</p> : null}
-        {revokeReceipt.isSuccess ? <p className="text-sm text-primary">Auditor status updated.</p> : null}
+        {grantReceipt.isSuccess ? <p className="text-sm font-bold text-primary-deep">Auditor grant confirmed.</p> : null}
+        {revokeReceipt.isSuccess ? <p className="text-sm font-bold text-primary-deep">Auditor status updated.</p> : null}
         {grant.error ? <p className="text-sm text-danger">{grant.error.message}</p> : null}
         {revoke.error ? <p className="text-sm text-danger">{revoke.error.message}</p> : null}
       </CardContent>

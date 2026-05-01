@@ -1,10 +1,12 @@
 "use client";
 
+import { ReceiptText, UserRound } from "lucide-react";
 import { useAccount } from "wagmi";
 import { AppShell } from "@/components/AppShell";
 import { RecipientBalanceCard } from "@/components/RecipientBalanceCard";
 import { EmptyState, ErrorState, LoadingState } from "@/components/states";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { env } from "@/lib/env";
 import { formatDate, shortenAddress } from "@/lib/format";
 import { useCampaigns, useRecipientPayouts } from "@/lib/hooks/useCampaigns";
@@ -26,8 +28,12 @@ export default function RecipientPage() {
       ) : (
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
           <RecipientBalanceCard confidentialToken={firstToken || env.defaultConfidentialToken} account={address} />
-          <Card>
+          <Card className="overflow-hidden">
             <CardHeader>
+              <div className="flex items-center justify-between gap-3">
+                <Badge variant="secondary">Recipient</Badge>
+                <UserRound className="h-6 w-6 text-primary-deep" />
+              </div>
               <CardTitle>My payout records</CardTitle>
             </CardHeader>
             <CardContent className="grid gap-3">
@@ -39,14 +45,18 @@ export default function RecipientPage() {
                 payouts.data.map(({ campaign, payout, index }) => (
                   <div
                     key={`${campaign.id}-${index}`}
-                    className="rounded-md border border-white/10 bg-white/[0.03] p-3 text-sm"
+                    className="rounded-2xl border border-muted-dark bg-ink p-4 text-sm text-dark-muted"
                   >
-                    <p className="font-semibold text-white">{campaign.name}</p>
-                    <p className="mt-1 text-muted">Created {formatDate(campaign.createdAt)}</p>
-                    <p className="mt-1 break-all text-muted">
+                    <div className="mb-3 flex items-center gap-2 text-primary">
+                      <ReceiptText className="h-4 w-4" />
+                      <p className="technical-label">Payout #{index}</p>
+                    </div>
+                    <p className="font-black text-[#FFFDF3]">{campaign.name}</p>
+                    <p className="mt-2">Created {formatDate(campaign.createdAt)}</p>
+                    <p className="mt-2 break-all font-mono text-xs">
                       Handle {payout.confidentialTransferRef}
                     </p>
-                    <p className="mt-1 text-muted">Sponsor {shortenAddress(campaign.sponsor)}</p>
+                    <p className="mt-2">Sponsor {shortenAddress(campaign.sponsor)}</p>
                   </div>
                 ))
               ) : (

@@ -14,12 +14,12 @@ export function NetworkGuard() {
   if (!isConnected || chainId === arbitrumSepolia.id) return null;
 
   return (
-    <Card className="border-warning/30 bg-warning/10">
+    <Card className="border-primary-deep/40 bg-primary-pale">
       <CardContent className="flex flex-col gap-4 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex gap-3">
-          <AlertTriangle className="mt-0.5 h-5 w-5 text-warning" />
+          <AlertTriangle className="mt-0.5 h-5 w-5 text-primary-deep" />
           <div>
-            <p className="font-semibold text-white">Wrong network</p>
+            <p className="font-black text-ink">Wrong network</p>
             <p className="text-sm text-muted">PrivateGrant Vault runs on Arbitrum Sepolia.</p>
           </div>
         </div>

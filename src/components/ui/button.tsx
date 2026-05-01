@@ -5,21 +5,25 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex h-10 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-primary/70 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex h-11 items-center justify-center gap-2 rounded-[28px] px-5 text-xs font-black uppercase tracking-[0.08em] transition-all focus:outline-none focus:ring-2 focus:ring-primary/55 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "bg-primary text-slate-950 hover:bg-primary/90",
-        secondary: "bg-secondary text-white hover:bg-secondary/90",
-        ghost: "bg-white/5 text-slate-100 hover:bg-white/10",
-        danger: "bg-danger text-white hover:bg-danger/90",
-        outline: "border border-white/12 bg-transparent text-slate-100 hover:bg-white/8"
+        default:
+          "border-b-4 border-primary-deep bg-primary text-ink shadow-[0_0_0_1px_rgba(255,216,0,0.35),0_20px_60px_rgba(255,216,0,0.12)] hover:bg-primary-hover active:translate-y-[2px] active:border-b-2",
+        secondary:
+          "border-2 border-ink bg-transparent text-ink hover:bg-ink hover:text-primary",
+        ghost:
+          "border border-border bg-surface text-ink hover:border-primary hover:bg-primary-pale",
+        danger: "border-b-4 border-red-900/45 bg-danger text-white hover:bg-red-500 active:translate-y-[2px] active:border-b-2",
+        outline:
+          "border border-muted-dark bg-ink text-primary hover:bg-charcoal"
       },
       size: {
-        default: "h-10 px-4",
-        sm: "h-9 px-3",
-        lg: "h-12 px-5",
-        icon: "h-10 w-10 px-0"
+        default: "h-11 px-5",
+        sm: "h-9 px-3 text-[0.68rem]",
+        lg: "h-[52px] min-h-[52px] px-7 py-4",
+        icon: "h-11 w-11 px-0"
       }
     },
     defaultVariants: {

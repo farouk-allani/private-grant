@@ -2,11 +2,11 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const variants = {
-  default: "border-white/10 bg-white/8 text-slate-200",
-  primary: "border-primary/25 bg-primary/10 text-primary",
-  secondary: "border-secondary/25 bg-secondary/15 text-violet-200",
-  warning: "border-warning/25 bg-warning/10 text-warning",
-  danger: "border-danger/25 bg-danger/10 text-red-200"
+  default: "border-border bg-surface text-muted",
+  primary: "border-primary-deep/35 bg-primary text-ink",
+  secondary: "border-muted-dark bg-ink text-primary",
+  warning: "border-primary-deep/35 bg-primary-pale text-primary-deep",
+  danger: "border-danger/30 bg-danger/10 text-danger"
 };
 
 export function Badge({
@@ -17,7 +17,7 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex h-7 items-center rounded-md border px-2.5 text-xs font-semibold",
+        "inline-flex h-7 items-center gap-2 rounded-full border px-3 font-mono text-[0.68rem] font-extrabold uppercase tracking-[0.14em] before:h-1.5 before:w-1.5 before:rounded-full before:bg-current before:content-['']",
         variants[variant],
         className
       )}

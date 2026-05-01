@@ -2,7 +2,7 @@
 
 import { createViemHandleClient } from "@iexec-nox/handle";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { KeyRound, Loader2, Send } from "lucide-react";
+import { KeyRound, Loader2, Send, ShieldAlert } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { parseUnits, type Address, type Hex } from "viem";
@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { erc7984Abi, privateGrantVaultAbi } from "@/lib/abis";
 import { env } from "@/lib/env";
 import type { Campaign } from "@/lib/types";
@@ -39,6 +40,7 @@ export function ConfidentialPayoutForm({ campaign }: { campaign: Campaign }) {
     resolver: zodResolver(payoutSchema),
     defaultValues: { recipient: "", amount: "", memo: "" }
   });
+  const amount = form.watch("amount");
 
   const operatorUntil = useMemo(() => {
     return BigInt(Math.floor(Date.now() / 1000)) + OPERATOR_DURATION_SECONDS;
@@ -90,10 +92,14 @@ export function ConfidentialPayoutForm({ campaign }: { campaign: Campaign }) {
   const canSend = Boolean(vaultAddress && walletClient.data && (isOperator.data || operatorReceipt.isSuccess));
 
   return (
-    <Card>
+    <Card className="border-muted-dark bg-ink text-[#FFFDF3]">
       <CardHeader>
-        <CardTitle>Send confidential payout</CardTitle>
-        <CardDescription>
+        <div className="flex items-center justify-between gap-3">
+          <Badge variant="primary">Confidential transfer</Badge>
+          <ShieldAlert className="h-6 w-6 text-primary" />
+        </div>
+        <CardTitle className="text-[#FFFDF3]">Send confidential payout</CardTitle>
+        <CardDescription className="text-dark-muted">
           The plaintext amount is sent to the Nox gateway for encryption and the transaction carries only
           an encrypted uint256 handle.
         </CardDescription>
@@ -113,37 +119,55 @@ export function ConfidentialPayoutForm({ campaign }: { campaign: Campaign }) {
           {canSend ? "Vault authorized" : "Authorize vault operator"}
         </Button>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
-          <Field label="Recipient wallet" error={form.formState.errors.recipient?.message}>
+          <Field label="Recipient wallet" description="Public recipient address for the settlement record." error={form.formState.errors.recipient?.message}>
             <Input placeholder="0x..." {...form.register("recipient")} />
           </Field>
-          <Field label="Private payout amount" error={form.formState.errors.amount?.message}>
+          <Field label="Confidential amount" description="Encrypted before the vault write. Do not place this value in the memo." error={form.formState.errors.amount?.message}>
             <Input inputMode="decimal" placeholder="750" {...form.register("amount")} />
           </Field>
-          <Field label="Public memo" error={form.formState.errors.memo?.message}>
+          <div className="rounded-2xl border border-primary/20 bg-primary/10 p-4">
+            <p className="technical-label text-primary">Encrypted preview</p>
+            <p className="mt-2 font-mono text-sm font-black text-[#FFFDF3]">
+              {amount ? "•••• RLC" : "Amount hidden after encryption"}
+            </p>
+          </div>
+          <Field label="Public memo" description="Keep memo safe for public observers." error={form.formState.errors.memo?.message}>
             <Input placeholder="Milestone accepted" {...form.register("memo")} />
           </Field>
-          <Button type="submit" disabled={!canSend || encrypting || payout.isPending || payoutReceipt.isLoading}>
+          <p className="rounded-2xl border border-primary/20 bg-primary-pale p-4 text-sm font-bold leading-6 text-ink">
+            Do not expose payout amount in public metadata.
+          </p>
+          <Button type="submit" size="lg" disabled={!canSend || encrypting || payout.isPending || payoutReceipt.isLoading}>
             {encrypting || payout.isPending || payoutReceipt.isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
               <Send className="h-4 w-4" />
             )}
-            Encrypt and send payout
+            Send Confidential Payout
           </Button>
         </form>
         <TransactionTimeline
           steps={[
             {
-              label: "Authorize vault as ERC-7984 operator",
+              label: "ERC-7984 operator approval",
               state: canSend ? "done" : operator.isPending || operatorReceipt.isLoading ? "pending" : "idle",
               hash: operator.data
             },
             {
-              label: "Encrypt amount with Nox Handle SDK",
+              label: "Nox confirmation",
               state: payoutReceipt.isSuccess ? "done" : encrypting ? "pending" : "idle"
             },
             {
-              label: "Send confidential transfer",
+              label: "Confidential transfer",
+              state: payoutReceipt.isSuccess
+                ? "done"
+                : payout.isPending || payoutReceipt.isLoading
+                  ? "pending"
+                  : "idle",
+              hash: payout.data
+            },
+            {
+              label: "Settlement recorded",
               state: payoutReceipt.isSuccess
                 ? "done"
                 : payout.isPending || payoutReceipt.isLoading

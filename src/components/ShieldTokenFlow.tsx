@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Lock, Shield } from "lucide-react";
+import { Lock, Shield, Vault } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { parseUnits } from "viem";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { erc20Abi, privateGrantVaultAbi } from "@/lib/abis";
 import { env } from "@/lib/env";
 import type { Campaign } from "@/lib/types";
@@ -52,13 +53,21 @@ export function ShieldTokenFlow({ campaign }: { campaign: Campaign }) {
   return (
     <Card>
       <CardHeader>
+        <div className="flex items-center justify-between gap-3">
+          <Badge variant="secondary">Shield funds</Badge>
+          <Vault className="h-6 w-6 text-primary-deep" />
+        </div>
         <CardTitle>Shield campaign funds</CardTitle>
         <CardDescription>
           Approve ERC-20 transfer, then wrap through the registered Nox ERC-7984 confidential token.
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
-        <Field label="Amount to shield" error={form.formState.errors.amount?.message}>
+        <Field
+          label="Amount to shield"
+          description="This moves public ERC-20 liquidity into the campaign's confidential token route."
+          error={form.formState.errors.amount?.message}
+        >
           <Input inputMode="decimal" placeholder="1000" {...form.register("amount")} />
         </Field>
         <div className="grid gap-3 sm:grid-cols-2">
@@ -78,7 +87,7 @@ export function ShieldTokenFlow({ campaign }: { campaign: Campaign }) {
         <TransactionTimeline
           steps={[
             {
-              label: "Approve ERC-20 for vault",
+              label: "ERC-20 approval",
               state: approveReceipt.isSuccess
                 ? "done"
                 : approve.isPending || approveReceipt.isLoading
@@ -87,13 +96,21 @@ export function ShieldTokenFlow({ campaign }: { campaign: Campaign }) {
               hash: approve.data
             },
             {
-              label: "Wrap into Nox Confidential Token",
+              label: "Shielding funds",
               state: shieldReceipt.isSuccess
                 ? "done"
                 : shield.isPending || shieldReceipt.isLoading
                   ? "pending"
                   : "idle",
               hash: shield.data
+            },
+            {
+              label: "Nox confirmation",
+              state: shieldReceipt.isSuccess
+                ? "done"
+                : shield.isPending || shieldReceipt.isLoading
+                  ? "pending"
+                  : "idle"
             }
           ]}
         />

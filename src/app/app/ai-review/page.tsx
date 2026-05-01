@@ -5,7 +5,7 @@ export default function AIReviewPage() {
   return (
     <AppShell
       title="ChainGPT review"
-      description="Summarize builder submissions, identify risk notes, and draft payout memos without making AI required for settlement."
+      description="Summarize builder submissions, identify risk notes, and draft safe public payout memos without making AI required for settlement."
     >
       <ChainGPTReviewPanel />
     </AppShell>
