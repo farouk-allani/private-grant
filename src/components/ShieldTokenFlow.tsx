@@ -1,13 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Lock, Shield, Vault } from "lucide-react";
+import { Coins, Lock, Shield, Vault } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { parseUnits } from "viem";
-import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { TransactionTimeline } from "@/components/TransactionTimeline";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ErrorMessage } from "@/components/ui/error-message";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -20,8 +21,11 @@ import { shieldSchema, type ShieldFormValues } from "@/lib/validation";
 
 export function ShieldTokenFlow({ campaign }: { campaign: Campaign }) {
   const vaultAddress = env.vaultAddress;
+  const { address } = useAccount();
+  const mint = useWriteContract();
   const approve = useWriteContract();
   const shield = useWriteContract();
+  const mintReceipt = useWaitForTransactionReceipt({ hash: mint.data });
   const approveReceipt = useWaitForTransactionReceipt({ hash: approve.data });
   const shieldReceipt = useWaitForTransactionReceipt({ hash: shield.data });
   const form = useForm<ShieldFormValues>({
@@ -31,6 +35,17 @@ export function ShieldTokenFlow({ campaign }: { campaign: Campaign }) {
 
   const amount = form.watch("amount");
   const parsedAmount = amount && /^\d+(\.\d+)?$/.test(amount) ? parseUnits(amount, 6) : 0n;
+
+  async function mintDemoTokens() {
+    if (!address || parsedAmount === 0n) return;
+    await mint.writeContractAsync({
+      address: campaign.token,
+      abi: erc20Abi,
+      functionName: "mint",
+      chainId: appChain.id,
+      args: [address, parsedAmount]
+    });
+  }
 
   async function approveVault() {
     if (!vaultAddress || parsedAmount === 0n) return;
@@ -74,7 +89,16 @@ export function ShieldTokenFlow({ campaign }: { campaign: Campaign }) {
         >
           <Input inputMode="decimal" placeholder="1000" {...form.register("amount")} />
         </Field>
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-3">
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={mintDemoTokens}
+            disabled={!address || parsedAmount === 0n || mint.isPending || mintReceipt.isLoading}
+          >
+            <Coins className="h-4 w-4" />
+            Mint demo pgUSDC
+          </Button>
           <Button type="button" variant="secondary" onClick={approveVault} disabled={!vaultAddress || parsedAmount === 0n || approve.isPending || approveReceipt.isLoading}>
             <Shield className="h-4 w-4" />
             Approve ERC-20
@@ -90,6 +114,15 @@ export function ShieldTokenFlow({ campaign }: { campaign: Campaign }) {
         </div>
         <TransactionTimeline
           steps={[
+            {
+              label: "Demo token mint",
+              state: mintReceipt.isSuccess
+                ? "done"
+                : mint.isPending || mintReceipt.isLoading
+                  ? "pending"
+                  : "idle",
+              hash: mint.data
+            },
             {
               label: "ERC-20 approval",
               state: approveReceipt.isSuccess
@@ -118,8 +151,9 @@ export function ShieldTokenFlow({ campaign }: { campaign: Campaign }) {
             }
           ]}
         />
-        {approve.error ? <p className="text-sm text-danger">{formatContractError(approve.error)}</p> : null}
-        {shield.error ? <p className="text-sm text-danger">{formatContractError(shield.error)}</p> : null}
+        <ErrorMessage>{formatContractError(mint.error)}</ErrorMessage>
+        <ErrorMessage>{formatContractError(approve.error)}</ErrorMessage>
+        <ErrorMessage>{formatContractError(shield.error)}</ErrorMessage>
       </CardContent>
     </Card>
   );

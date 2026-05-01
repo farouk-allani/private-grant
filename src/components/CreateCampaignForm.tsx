@@ -7,6 +7,7 @@ import { parseUnits, zeroAddress, type Address } from "viem";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ErrorMessage } from "@/components/ui/error-message";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -151,7 +152,7 @@ export function CreateCampaignForm() {
             </a>
           ) : null}
           {receipt.isSuccess ? <p className="text-sm font-bold text-primary-deep">Campaign confirmed on-chain.</p> : null}
-          {error ? <p className="text-sm text-danger">{formatContractError(error)}</p> : null}
+          <ErrorMessage>{formatContractError(error)}</ErrorMessage>
         </form>
       </CardContent>
       </Card>

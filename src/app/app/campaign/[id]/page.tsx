@@ -14,6 +14,7 @@ import { EmptyState, ErrorState, LoadingState } from "@/components/states";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ErrorMessage } from "@/components/ui/error-message";
 import { privateGrantVaultAbi } from "@/lib/abis";
 import { appChain } from "@/lib/chains";
 import { env } from "@/lib/env";
@@ -113,7 +114,7 @@ export default function CampaignDetailPage() {
                       <Archive className="h-4 w-4" />
                       Close campaign
                     </Button>
-                    {close.error ? <p className="text-sm text-danger">{formatContractError(close.error)}</p> : null}
+                    <ErrorMessage>{formatContractError(close.error)}</ErrorMessage>
                   </div>
                 ) : null}
               </div>

@@ -8,6 +8,7 @@ import { useReadContract, useWalletClient } from "wagmi";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ErrorMessage } from "@/components/ui/error-message";
 import { erc7984Abi } from "@/lib/abis";
 import { formatTokenAmount, shortenAddress } from "@/lib/format";
 
@@ -73,7 +74,7 @@ export function RecipientBalanceCard({
           Decrypt my balance
         </Button>
         {value ? <p className="rounded-2xl border border-primary/30 bg-primary-pale p-4 text-sm font-black text-ink">Decrypted balance: {value}</p> : null}
-        {error ? <p className="text-danger">{error}</p> : null}
+        <ErrorMessage>{error}</ErrorMessage>
       </CardContent>
     </Card>
   );

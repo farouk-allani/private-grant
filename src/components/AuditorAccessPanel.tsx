@@ -8,6 +8,7 @@ import { isAddress, zeroAddress, type Address } from "viem";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ErrorMessage } from "@/components/ui/error-message";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -106,8 +107,8 @@ export function AuditorAccessPanel({ campaign }: { campaign: Campaign }) {
         </Button>
         {grantReceipt.isSuccess ? <p className="text-sm font-bold text-primary-deep">Auditor grant confirmed.</p> : null}
         {revokeReceipt.isSuccess ? <p className="text-sm font-bold text-primary-deep">Auditor status updated.</p> : null}
-        {grant.error ? <p className="text-sm text-danger">{formatContractError(grant.error)}</p> : null}
-        {revoke.error ? <p className="text-sm text-danger">{formatContractError(revoke.error)}</p> : null}
+        <ErrorMessage>{formatContractError(grant.error)}</ErrorMessage>
+        <ErrorMessage>{formatContractError(revoke.error)}</ErrorMessage>
       </CardContent>
     </Card>
   );

@@ -16,6 +16,7 @@ import {
 import { TransactionTimeline } from "@/components/TransactionTimeline";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ErrorMessage } from "@/components/ui/error-message";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -182,9 +183,9 @@ export function ConfidentialPayoutForm({ campaign }: { campaign: Campaign }) {
             }
           ]}
         />
-        {encryptionError ? <p className="text-sm text-danger">{encryptionError}</p> : null}
-        {operator.error ? <p className="text-sm text-danger">{formatContractError(operator.error)}</p> : null}
-        {payout.error ? <p className="text-sm text-danger">{formatContractError(payout.error)}</p> : null}
+        <ErrorMessage>{encryptionError}</ErrorMessage>
+        <ErrorMessage>{formatContractError(operator.error)}</ErrorMessage>
+        <ErrorMessage>{formatContractError(payout.error)}</ErrorMessage>
       </CardContent>
     </Card>
   );

@@ -6,6 +6,7 @@ import { Fragment, useEffect, useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ErrorMessage } from "@/components/ui/error-message";
 import { Field } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -316,7 +317,7 @@ export function ChainGPTReviewPanel() {
             <ReviewMarkdown markdown={answer} />
           </div>
         ) : null}
-        {error ? <p className="text-sm text-danger">{error}</p> : null}
+        <ErrorMessage>{error}</ErrorMessage>
       </CardContent>
     </Card>
   );
