@@ -233,6 +233,7 @@ contract PrivateGrantVault is ReentrancyGuard {
         if (campaign.confidentialToken == address(0)) revert InvalidConfidentialToken();
 
         euint256 amount = Nox.fromExternal(encryptedAmount, inputProof);
+        Nox.allowTransient(amount, campaign.confidentialToken);
         euint256 transferred = IERC7984(campaign.confidentialToken).confidentialTransferFrom(
             msg.sender,
             recipient,

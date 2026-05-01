@@ -16,6 +16,7 @@ import { privateGrantVaultAbi } from "@/lib/abis";
 import { appChain } from "@/lib/chains";
 import { env } from "@/lib/env";
 import { formatContractError } from "@/lib/errors";
+import { demoTxGas } from "@/lib/tx";
 import { shortenAddress } from "@/lib/format";
 import type { Campaign } from "@/lib/types";
 
@@ -47,6 +48,7 @@ export function AuditorAccessPanel({ campaign }: { campaign: Campaign }) {
       abi: privateGrantVaultAbi,
       functionName: "grantAuditorForPayout",
       chainId: appChain.id,
+      ...demoTxGas,
       args: [campaign.id, BigInt(values.payoutIndex), values.auditor as Address]
     });
   }
@@ -58,6 +60,7 @@ export function AuditorAccessPanel({ campaign }: { campaign: Campaign }) {
       abi: privateGrantVaultAbi,
       functionName: "revokeCampaignAuditor",
       chainId: appChain.id,
+      ...demoTxGas,
       args: [campaign.id]
     });
   }

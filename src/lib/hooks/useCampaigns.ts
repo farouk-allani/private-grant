@@ -12,6 +12,11 @@ type CampaignCreatedLogArgs = {
   id?: bigint;
 };
 
+type FundsShieldedLogArgs = {
+  id?: bigint;
+  publicAmount?: bigint;
+};
+
 export function useCampaigns() {
   const publicClient = usePublicClient({ chainId: appChain.id });
   const vaultAddress = env.vaultAddress;
@@ -107,6 +112,40 @@ export function usePayouts(id?: bigint) {
         )
       );
       return payouts.map((payout) => payout as PayoutMetadata);
+    }
+  });
+}
+
+export function useShieldedTotal(id?: bigint) {
+  const publicClient = usePublicClient({ chainId: appChain.id });
+  const vaultAddress = env.vaultAddress;
+
+  return useQuery({
+    queryKey: ["shielded-total", vaultAddress, id?.toString()],
+    enabled: Boolean(publicClient && vaultAddress && id),
+    queryFn: async () => {
+      if (!publicClient || !vaultAddress || !id) return 0n;
+      const event = privateGrantVaultAbi.find(
+        (item) => item.type === "event" && item.name === "FundsShielded"
+      );
+      if (!event) return 0n;
+
+      const logs = await publicClient.getLogs({
+        address: vaultAddress,
+        event,
+        fromBlock: 0n,
+        toBlock: "latest"
+      });
+
+      return logs.reduce((sum, log) => {
+        const decoded = decodeEventLog({
+          abi: privateGrantVaultAbi,
+          data: log.data,
+          topics: log.topics
+        });
+        const args = decoded.args as FundsShieldedLogArgs;
+        return args.id === id ? sum + BigInt(args.publicAmount ?? 0n) : sum;
+      }, 0n);
     }
   });
 }

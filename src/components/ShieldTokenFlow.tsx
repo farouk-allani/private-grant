@@ -16,6 +16,7 @@ import { erc20Abi, privateGrantVaultAbi } from "@/lib/abis";
 import { appChain } from "@/lib/chains";
 import { env } from "@/lib/env";
 import { formatContractError } from "@/lib/errors";
+import { demoTxGas } from "@/lib/tx";
 import type { Campaign } from "@/lib/types";
 import { shieldSchema, type ShieldFormValues } from "@/lib/validation";
 
@@ -43,6 +44,7 @@ export function ShieldTokenFlow({ campaign }: { campaign: Campaign }) {
       abi: erc20Abi,
       functionName: "mint",
       chainId: appChain.id,
+      ...demoTxGas,
       args: [address, parsedAmount]
     });
   }
@@ -54,6 +56,7 @@ export function ShieldTokenFlow({ campaign }: { campaign: Campaign }) {
       abi: erc20Abi,
       functionName: "approve",
       chainId: appChain.id,
+      ...demoTxGas,
       args: [vaultAddress, parsedAmount]
     });
   }
@@ -65,6 +68,7 @@ export function ShieldTokenFlow({ campaign }: { campaign: Campaign }) {
       abi: privateGrantVaultAbi,
       functionName: "shieldCampaignFunds",
       chainId: appChain.id,
+      ...demoTxGas,
       args: [campaign.id, parsedAmount]
     });
   }
@@ -116,44 +120,55 @@ export function ShieldTokenFlow({ campaign }: { campaign: Campaign }) {
           steps={[
             {
               label: "Demo token mint",
-              state: mintReceipt.isSuccess
-                ? "done"
-                : mint.isPending || mintReceipt.isLoading
-                  ? "pending"
-                  : "idle",
+              state: mintReceipt.isError
+                ? "failed"
+                : mintReceipt.isSuccess
+                  ? "done"
+                  : mint.isPending || mintReceipt.isLoading
+                    ? "pending"
+                    : "idle",
               hash: mint.data
             },
             {
               label: "ERC-20 approval",
-              state: approveReceipt.isSuccess
-                ? "done"
-                : approve.isPending || approveReceipt.isLoading
-                  ? "pending"
-                  : "idle",
+              state: approveReceipt.isError
+                ? "failed"
+                : approveReceipt.isSuccess
+                  ? "done"
+                  : approve.isPending || approveReceipt.isLoading
+                    ? "pending"
+                    : "idle",
               hash: approve.data
             },
             {
               label: "Shielding funds",
-              state: shieldReceipt.isSuccess
-                ? "done"
-                : shield.isPending || shieldReceipt.isLoading
-                  ? "pending"
-                  : "idle",
+              state: shieldReceipt.isError
+                ? "failed"
+                : shieldReceipt.isSuccess
+                  ? "done"
+                  : shield.isPending || shieldReceipt.isLoading
+                    ? "pending"
+                    : "idle",
               hash: shield.data
             },
             {
               label: "Nox confirmation",
-              state: shieldReceipt.isSuccess
-                ? "done"
-                : shield.isPending || shieldReceipt.isLoading
-                  ? "pending"
-                  : "idle"
+              state: shieldReceipt.isError
+                ? "failed"
+                : shieldReceipt.isSuccess
+                  ? "done"
+                  : shield.isPending || shieldReceipt.isLoading
+                    ? "pending"
+                    : "idle"
             }
           ]}
         />
         <ErrorMessage>{formatContractError(mint.error)}</ErrorMessage>
+        <ErrorMessage>{formatContractError(mintReceipt.error)}</ErrorMessage>
         <ErrorMessage>{formatContractError(approve.error)}</ErrorMessage>
+        <ErrorMessage>{formatContractError(approveReceipt.error)}</ErrorMessage>
         <ErrorMessage>{formatContractError(shield.error)}</ErrorMessage>
+        <ErrorMessage>{formatContractError(shieldReceipt.error)}</ErrorMessage>
       </CardContent>
     </Card>
   );

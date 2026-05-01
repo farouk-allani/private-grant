@@ -2,8 +2,8 @@
   "network": "arbitrumSepolia",
   "chainId": 421614,
   "deployer": "0xF98f1353759fe09C0F1Ff06d27Cd56Cf07A20F8C",
-  "privateGrantVault": "0xd6F088a4EE2458A55E32116D5b0742894EDcfce5",
-  "testToken": "0xF2Fb26860aD5872CEfABB7C3368d15403D607A4B",
-  "confidentialToken": "0xDd86C3d1D2b3fed24c308B569072cA8b9Ee0Fd07",
+  "privateGrantVault": "0xD3ab8d4c525531000b0c9b44E0228AD4ddBaB4ad",
+  "testToken": "0x44e0dc0717236d8276049ef1db5CEA3F7eFE6319",
+  "confidentialToken": "0x42cfF3870e4Ff93169c4b68C5461adA16bEB4da9",
   "noxCompute": "0xd464B198f06756a1d00be223634b85E0a731c229"
 }

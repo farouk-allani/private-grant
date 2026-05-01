@@ -24,6 +24,9 @@ import { erc7984Abi, privateGrantVaultAbi } from "@/lib/abis";
 import { appChain } from "@/lib/chains";
 import { env } from "@/lib/env";
 import { formatContractError } from "@/lib/errors";
+import { formatTokenAmount } from "@/lib/format";
+import { useShieldedTotal } from "@/lib/hooks/useCampaigns";
+import { demoTxGas } from "@/lib/tx";
 import type { Campaign } from "@/lib/types";
 import { payoutSchema, type PayoutFormValues } from "@/lib/validation";
 
@@ -37,6 +40,7 @@ export function ConfidentialPayoutForm({ campaign }: { campaign: Campaign }) {
   const payout = useWriteContract();
   const operatorReceipt = useWaitForTransactionReceipt({ hash: operator.data });
   const payoutReceipt = useWaitForTransactionReceipt({ hash: payout.data });
+  const shieldedTotal = useShieldedTotal(campaign.id);
   const [encrypting, setEncrypting] = useState(false);
   const [encryptionError, setEncryptionError] = useState<string>();
   const form = useForm<PayoutFormValues>({
@@ -44,6 +48,7 @@ export function ConfidentialPayoutForm({ campaign }: { campaign: Campaign }) {
     defaultValues: { recipient: "", amount: "", memo: "" }
   });
   const amount = form.watch("amount");
+  const parsedAmount = amount && /^\d+(\.\d+)?$/.test(amount) ? parseUnits(amount, 6) : 0n;
 
   const operatorUntil = useMemo(() => {
     return BigInt(Math.floor(Date.now() / 1000)) + OPERATOR_DURATION_SECONDS;
@@ -65,6 +70,7 @@ export function ConfidentialPayoutForm({ campaign }: { campaign: Campaign }) {
       abi: erc7984Abi,
       functionName: "setOperator",
       chainId: appChain.id,
+      ...demoTxGas,
       args: [vaultAddress, Number(operatorUntil)]
     });
     await isOperator.refetch();
@@ -86,6 +92,7 @@ export function ConfidentialPayoutForm({ campaign }: { campaign: Campaign }) {
         abi: privateGrantVaultAbi,
         functionName: "sendConfidentialPayout",
         chainId: appChain.id,
+        ...demoTxGas,
         args: [campaign.id, values.recipient as Address, handle as Hex, handleProof as Hex, values.memo || ""]
       });
     } catch (error) {
@@ -96,6 +103,8 @@ export function ConfidentialPayoutForm({ campaign }: { campaign: Campaign }) {
   }
 
   const canSend = Boolean(vaultAddress && walletClient.data && (isOperator.data || operatorReceipt.isSuccess));
+  const publicShieldedTotal = shieldedTotal.data ?? 0n;
+  const exceedsPublicShieldedTotal = parsedAmount > 0n && parsedAmount > publicShieldedTotal;
 
   return (
     <Card className="border-muted-dark bg-ink text-[#FFFDF3]">
@@ -113,7 +122,7 @@ export function ConfidentialPayoutForm({ campaign }: { campaign: Campaign }) {
       <CardContent className="grid gap-4">
         <Button
           type="button"
-          variant={canSend ? "ghost" : "secondary"}
+          variant={canSend ? "ghost" : "outline"}
           onClick={authorizeVault}
           disabled={!vaultAddress || operator.isPending || operatorReceipt.isLoading}
         >
@@ -131,6 +140,18 @@ export function ConfidentialPayoutForm({ campaign }: { campaign: Campaign }) {
           <Field label="Confidential amount" description="Encrypted before the vault write. Do not place this value in the memo." error={form.formState.errors.amount?.message}>
             <Input inputMode="decimal" placeholder="750" {...form.register("amount")} />
           </Field>
+          <div className="rounded-2xl border border-primary/20 bg-primary/10 p-4 text-sm text-dark-muted">
+            <p className="technical-label text-primary">Public shielded funding</p>
+            <p className="mt-2 font-mono text-base font-black text-[#FFFDF3]">
+              {shieldedTotal.isLoading ? "Loading..." : `${formatTokenAmount(publicShieldedTotal, 6)} pgUSDC`}
+            </p>
+          </div>
+          {exceedsPublicShieldedTotal ? (
+            <ErrorMessage>
+              This demo campaign has only {formatTokenAmount(publicShieldedTotal, 6)} pgUSDC shielded.
+              Enter a smaller confidential payout amount before sending.
+            </ErrorMessage>
+          ) : null}
           <div className="rounded-2xl border border-primary/20 bg-primary/10 p-4">
             <p className="technical-label text-primary">Encrypted preview</p>
             <p className="mt-2 font-mono text-sm font-black text-[#FFFDF3]">
@@ -143,7 +164,17 @@ export function ConfidentialPayoutForm({ campaign }: { campaign: Campaign }) {
           <p className="rounded-2xl border border-primary/20 bg-primary-pale p-4 text-sm font-bold leading-6 text-ink">
             Do not expose payout amount in public metadata.
           </p>
-          <Button type="submit" size="lg" disabled={!canSend || encrypting || payout.isPending || payoutReceipt.isLoading}>
+          <Button
+            type="submit"
+            size="lg"
+            disabled={
+              !canSend ||
+              exceedsPublicShieldedTotal ||
+              encrypting ||
+              payout.isPending ||
+              payoutReceipt.isLoading
+            }
+          >
             {encrypting || payout.isPending || payoutReceipt.isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
@@ -156,36 +187,54 @@ export function ConfidentialPayoutForm({ campaign }: { campaign: Campaign }) {
           steps={[
             {
               label: "ERC-7984 operator approval",
-              state: canSend ? "done" : operator.isPending || operatorReceipt.isLoading ? "pending" : "idle",
+              state: operatorReceipt.isError
+                ? "failed"
+                : canSend
+                  ? "done"
+                  : operator.isPending || operatorReceipt.isLoading
+                    ? "pending"
+                    : "idle",
               hash: operator.data
             },
             {
               label: "Nox confirmation",
-              state: payoutReceipt.isSuccess ? "done" : encrypting ? "pending" : "idle"
+              state: payoutReceipt.isError
+                ? "failed"
+                : payoutReceipt.isSuccess
+                  ? "done"
+                  : encrypting
+                    ? "pending"
+                    : "idle"
             },
             {
               label: "Confidential transfer",
-              state: payoutReceipt.isSuccess
-                ? "done"
-                : payout.isPending || payoutReceipt.isLoading
-                  ? "pending"
-                  : "idle",
+              state: payoutReceipt.isError
+                ? "failed"
+                : payoutReceipt.isSuccess
+                  ? "done"
+                  : payout.isPending || payoutReceipt.isLoading
+                    ? "pending"
+                    : "idle",
               hash: payout.data
             },
             {
               label: "Settlement recorded",
-              state: payoutReceipt.isSuccess
-                ? "done"
-                : payout.isPending || payoutReceipt.isLoading
-                  ? "pending"
-                  : "idle",
+              state: payoutReceipt.isError
+                ? "failed"
+                : payoutReceipt.isSuccess
+                  ? "done"
+                  : payout.isPending || payoutReceipt.isLoading
+                    ? "pending"
+                    : "idle",
               hash: payout.data
             }
           ]}
         />
         <ErrorMessage>{encryptionError}</ErrorMessage>
         <ErrorMessage>{formatContractError(operator.error)}</ErrorMessage>
+        <ErrorMessage>{formatContractError(operatorReceipt.error)}</ErrorMessage>
         <ErrorMessage>{formatContractError(payout.error)}</ErrorMessage>
+        <ErrorMessage>{formatContractError(payoutReceipt.error)}</ErrorMessage>
       </CardContent>
     </Card>
   );

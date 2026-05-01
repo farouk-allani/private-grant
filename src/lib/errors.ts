@@ -23,6 +23,10 @@ export function formatContractError(error?: Error | null): string | undefined {
     ].join(" ");
   }
 
+  if (/transaction failed|transaction was reverted|execution reverted/i.test(error.message)) {
+    return "The transaction failed on-chain. Check the amount, wallet permissions, and available shielded balance, then try again.";
+  }
+
   if (RPC_UNAVAILABLE_PATTERNS.some((pattern) => pattern.test(error.message))) {
     return [
       "The wallet could not reach the Arbitrum Sepolia RPC endpoint.",

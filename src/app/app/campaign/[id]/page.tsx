@@ -20,6 +20,7 @@ import { appChain } from "@/lib/chains";
 import { env } from "@/lib/env";
 import { formatContractError } from "@/lib/errors";
 import { formatDate, formatTokenAmount, shortenAddress } from "@/lib/format";
+import { demoTxGas } from "@/lib/tx";
 import { useCampaign, usePayouts } from "@/lib/hooks/useCampaigns";
 
 export default function CampaignDetailPage() {
@@ -38,6 +39,7 @@ export default function CampaignDetailPage() {
       abi: privateGrantVaultAbi,
       functionName: "closeCampaign",
       chainId: appChain.id,
+      ...demoTxGas,
       args: [id]
     });
   }

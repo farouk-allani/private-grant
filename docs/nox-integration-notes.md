@@ -43,9 +43,11 @@ The implemented flow is:
 3. Sponsor calls `PrivateGrantVault.sendConfidentialPayout(...)`.
 4. The vault calls `Nox.fromExternal(encryptedAmount, proof)`.
 5. That validation grants the vault transient access to the `euint256` handle.
-6. The vault calls `IERC7984.confidentialTransferFrom(sponsor, recipient, euint256Amount)`.
-7. The sponsor must have called `setOperator(vault, until)` on the confidential token.
-8. The vault emits only recipient and encrypted handle metadata, never the plaintext private payout amount.
+6. The vault grants the confidential token transient access to the amount handle for its internal
+   balance math.
+7. The vault calls `IERC7984.confidentialTransferFrom(sponsor, recipient, euint256Amount)`.
+8. The sponsor must have called `setOperator(vault, until)` on the confidential token.
+9. The vault emits only recipient and encrypted handle metadata, never the plaintext private payout amount.
 
 ## Shielding Flow
 

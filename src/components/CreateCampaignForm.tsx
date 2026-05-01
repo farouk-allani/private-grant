@@ -17,6 +17,7 @@ import { privateGrantVaultAbi } from "@/lib/abis";
 import { appChain } from "@/lib/chains";
 import { env } from "@/lib/env";
 import { formatContractError } from "@/lib/errors";
+import { demoTxGas } from "@/lib/tx";
 import { campaignSchema, type CampaignFormValues } from "@/lib/validation";
 
 export function CreateCampaignForm() {
@@ -46,10 +47,11 @@ export function CreateCampaignForm() {
 
     await writeContractAsync({
       address: vaultAddress,
-      abi: privateGrantVaultAbi,
-      functionName: "createCampaign",
-      chainId: appChain.id,
-      args: [
+        abi: privateGrantVaultAbi,
+        functionName: "createCampaign",
+        chainId: appChain.id,
+        ...demoTxGas,
+        args: [
         values.name,
         values.description,
         values.token as Address,

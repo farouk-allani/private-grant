@@ -1,9 +1,9 @@
-import { CheckCircle2, Circle, Loader2 } from "lucide-react";
+import { CheckCircle2, Circle, Loader2, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type TimelineStep = {
   label: string;
-  state: "idle" | "pending" | "done";
+  state: "idle" | "pending" | "done" | "failed";
   hash?: string;
 };
 
@@ -17,13 +17,16 @@ export function TransactionTimeline({ steps }: { steps: TimelineStep[] }) {
           className={cn(
             "relative flex items-start gap-3 rounded-2xl border border-muted-dark bg-charcoal p-3 text-sm",
             step.state === "done" && "border-primary/35 bg-primary/10",
-            step.state === "pending" && "border-info/35 bg-info/10"
+            step.state === "pending" && "border-info/35 bg-info/10",
+            step.state === "failed" && "border-danger/35 bg-danger/10"
           )}
         >
           {step.state === "done" ? (
             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
           ) : step.state === "pending" ? (
             <Loader2 className="mt-0.5 h-4 w-4 shrink-0 animate-spin text-info" />
+          ) : step.state === "failed" ? (
+            <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-danger" />
           ) : (
             <Circle className="mt-0.5 h-4 w-4 shrink-0 text-dark-muted" />
           )}
