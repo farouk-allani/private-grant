@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { privateGrantVaultAbi } from "@/lib/abis";
@@ -83,15 +84,16 @@ export function CreateCampaignForm() {
               <Input placeholder="Retroactive builder grants" {...form.register("name")} />
             </Field>
             <Field label="Category" description="Choose the public reason for this payout pool." error={form.formState.errors.category?.message}>
-              <select
-                className="h-[52px] rounded-xl border border-border bg-surface px-4 text-sm font-semibold text-ink outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15"
-                {...form.register("category")}
-              >
-                <option value="grant">Grant</option>
-                <option value="bounty">Bounty</option>
-                <option value="payroll">Payroll</option>
-                <option value="hackathon reward">Hackathon reward</option>
-              </select>
+              <Select
+                value={form.watch("category")}
+                onChange={(v) => form.setValue("category", v as CampaignFormValues["category"])}
+                options={[
+                  { label: "Grant", value: "grant" },
+                  { label: "Bounty", value: "bounty" },
+                  { label: "Payroll", value: "payroll" },
+                  { label: "Hackathon reward", value: "hackathon reward" },
+                ]}
+              />
             </Field>
           </div>
           <Field
